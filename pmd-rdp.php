@@ -96,8 +96,10 @@ class dmp {
 
         $sx = '<div class="wrap">';
         $sx .=  $img_logo;
-        $sx .= '<h1>' . $title . '</h1>';
+        $sx .= '<h1 class="wp-heading-inline">' . $title . '</h1>';
         $sx .= '</div>';
+        
+        $sx .= '<a href="http://localhost/projeto/RDP-Brasil/wp-admin/plugin-install.php" class="page-title-action">Adicionar novo</a>';
         return($sx);
     }
 
