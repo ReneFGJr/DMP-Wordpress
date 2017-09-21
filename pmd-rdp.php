@@ -17,6 +17,7 @@ define("DMP_VERSION","v0.17.09.20");
 define("DMP_PLUGIN","DMP-Wordpress");
 define("DMP_DIR","/wp-content/plugins/DMP-Wordpress/");
 define("DMP_BOOTSTRAP_VERSION","v3.3.7");
+define("DMP_TABLE_TEMPLAT","dmp_templat");
 
 // CSS
 wp_enqueue_style( DMP_PLUGIN,
@@ -26,11 +27,12 @@ wp_enqueue_style( DMP_PLUGIN,
 wp_enqueue_style( "bootstrap",
     get_site_url().DMP_DIR.( 'css/bootstrap.css' ),
     array(), DMP_BOOTSTRAP_VERSION, 'all' );    
-    
+	
 wp_enqueue_script("bootstrap", 
     get_site_url().DMP_DIR.( 'js/bootstrap.js' ),
-    array(), DMP_BOOTSTRAP_VERSION, 'all' );   
-    
+    array(), DMP_BOOTSTRAP_VERSION, 'all' );  
+	
+
 /**********************************************************************************/
 /* active *************************************************************************/
 /**********************************************************************************/
@@ -54,8 +56,8 @@ wp_enqueue_script("bootstrap",
 class dmp {
     function install() {
         global $wpdb;
-        $sqlMembros = "CREATE TABLE IF NOT EXISTS dmp_templat (
-                id_tp bigint(20) unsigned NOT NULL,
+        $sqlMembros = "CREATE TABLE IF NOT EXISTS ".DMP_TABLE_TEMPLAT." (
+                id_tp serial NOT NULL,
                   tp_name char(200) NOT NULL,
                   tp_id char(20),
                   tp_description text,
@@ -69,7 +71,26 @@ class dmp {
     /*************************************** templat ***************************/
     function templat_list()
         {
-            $sx = '<h3>'.msg('plans_templat').'</h3>';
+        	global $data, $wpdb;
+			$novo = '<span class="btn btn-default" id="templat_new" onclick="panel_click();">'.msg('add_new').'</span>';
+            echo '<h3>'.msg('plans_templat').' '.$novo.'</h3>';
+						
+			/* form */
+			$data = array();
+			if ($_POST)
+				{
+					$data['tp_id'] = $_POST['tp_id'];
+					$data['tp_name'] = $_POST['tp_name'];
+					$data['tp_descr'] = $_POST['tp_descr'];
+					$data['action'] = $_POST['action'];					
+				}
+			$data['save'] = msg('save').' >>>';
+			$sx .= view("view/templat_form.php");
+			if ((strlen($data['tp_name']) > 0) and (strlen($data['tp_descr']) > 0) and (strlen($data['action']) > 0))
+				{
+					$this->templat_data($data);
+				}
+		
             $sx .= '<table width="100%" class="table">'.cr();
             $sx .= '<tr>';
             $sx .= '<th width="2%">'.msg("#")."</th>".cr();
@@ -78,12 +99,53 @@ class dmp {
             $sx .= '<th width="10%">'.msg("created")."</th>".cr();
             $sx .= '<th width="2%">'.msg("plans")."</th>".cr();
             $sx .= '</tr>'.cr();
+			
+			$sql = "select * from ".DMP_TABLE_TEMPLAT." where tp_status >= 1 order by tp_id ";
+			$rlt = $wpdb->get_results( 
+                    $wpdb->prepare($sql, $some_parameter) 
+                 );
+		    foreach( $rlt as $rlt ) {
+				$sx .= '<tr>';
+				$sx .= '<td>'.$rlt->tp_id.'</td>';
+				$sx .= '<td>'.$rlt->tp_name.'</td>';
+				$sx .= '<td>'.$rlt->tp_description.'</td>';				
+				$sx .= '<td>'.$rlt->tp_created.'</td>';
+				$sx .= '<td align="center">'.$rlt->tp_used.'</td>';
+				$sx .= '</tr>'.cr();
+		    }	 
+
             $sx .= '</table>'.cr();
             return($sx);
         }
+	function templat_data($data)
+		{
+			global $wpdb;
+			$id = $data['id_tp'];
+			$tp_id = $data['tp_id'];
+			$tp_name = $data['tp_name'];
+			$tp_description = $data['tp_descr'];
+			$tp_status = $data['tp_status'];
+			
+			if (isset($data['id_tp']))
+				{
+					$sql = "update set ".DMP_TABLE_TEMPLAT." set
+								tp_name = '$t_name',
+								tp_id = '$t_id',
+								tp_description = '$t_description'
+							where id_tp = $id";
+					$wpdb -> query($sql);
+				} else {
+					$sql = "insert into ".DMP_TABLE_TEMPLAT." 
+								(tp_name, tp_id, tp_description, tp_status, tp_used)
+							values
+								('$tp_name','$tp_id','$tp_description', 1, 0) ";
+					$wpdb -> query($sql);
+				}
+				echo '<tt>'.$sql.'</tt>';
+		}
 
     function cab($sub='') {
-        $img = DMP_DIR.'img/icone_dmp_rnp.png';
+        $img = DMP_DIR.'img/icone-dmp-rnp.png';
 
         $img_logo = '<img src="' . get_site_url() . $img . '" class="img-thumbnail" style="height: 90px;" align="right">';
         $title = '<font style="background-color: yellow; padding: 0px 5px 0px 5px;" color="#0000ff">RDP</font><font color="green">Brasil</font>';
@@ -132,17 +194,40 @@ function dmp_admin_home() {
 /*************** templat *****************************/
 function dmp_admin_templat() {
     $c = new dmp;
-    $sx = $c->cab('templat');
+    echo $c->cab('templat');
     $sx .= $c->templat_list();
     echo $sx;
 }
 
 function msg($t)
     {
-        return($t);
+    	return($t);
     }
+function view($f)
+	{
+		//$f = DMP_DIR . $f;
+		$dir = $_SERVER['SCRIPT_NAME'];
+		$dir = substr($dir,0,strpos($dir,'/admin')); 
+		$dir .= '/../'.DMP_DIR;
+		$f = $dir.$f;
+		if (file_exists($f))
+		{
+			require($f);
+			return("");
+		} else {
+			return("ERRO VIEW");
+		}
+	}
 function cr()
     {
         return(chr(13).chr(10));
     }
+if (!function_exists('troca')) {
+    function troca($qutf, $qc, $qt) {
+        if (is_array($qutf)) {
+            return ('erro');
+        }
+        return (str_replace(array($qc), array($qt), $qutf));
+    }
+}	
 ?>
