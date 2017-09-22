@@ -3,11 +3,11 @@ global $data;
 ?>
 <form method="post">
 	<input type="hidden" name="id_tp" value="<?php echo $data['id_tp']; ?>">	
-	<div class="container-fluid" id="templat_form">
+	<div class="container-fluid" id="templat_form" style="display: none;">
 		<div class="row">
 			<div class="col-md-1">
 				<label for="templat_name"><?php echo msg('templat_id'); ?></label>
-				<input type="text" class="form-control" name="tp_id" value="<?php echo $data['tp_id']; ?>"  aria-describedby="emailHelp" placeholder="$templat_id">
+				<input type="text" id="ola" class="form-control" name="tp_id" value="<?php echo $data['tp_id']; ?>"  aria-describedby="emailHelp" placeholder="$templat_id">
 				<small id="emailHelp" class="form-text text-muted">Templat ID</small>
 			</div>
 			
@@ -31,9 +31,9 @@ global $data;
 </form>
 
 <script>
-	function panel_click()
-		{
-		alert("Handler for .click() called.");
-		}
+    jQuery("#templat_new").click(function() {
+            jQuery("#templat_form").toggle("slow");
+        });
+
 </script>
 

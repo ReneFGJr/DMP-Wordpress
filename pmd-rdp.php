@@ -72,7 +72,7 @@ class dmp {
     function templat_list()
         {
         	global $data, $wpdb;
-			$novo = '<span class="btn btn-default" id="templat_new" onclick="panel_click();">'.msg('add_new').'</span>';
+			$novo = '<span class="btn btn-default" id="templat_new" >'.msg('add_new').'</span>';
             echo '<h3>'.msg('plans_templat').' '.$novo.'</h3>';
 						
 			/* form */
@@ -145,7 +145,7 @@ class dmp {
 		}
 
     function cab($sub='') {
-        $img = DMP_DIR.'img/icone-dmp-rnp.png';
+        $img = DMP_DIR.'img/icone_dmp_rnp.png';
 
         $img_logo = '<img src="' . get_site_url() . $img . '" class="img-thumbnail" style="height: 90px;" align="right">';
         $title = '<font style="background-color: yellow; padding: 0px 5px 0px 5px;" color="#0000ff">RDP</font><font color="green">Brasil</font>';
