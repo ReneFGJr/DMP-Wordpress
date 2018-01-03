@@ -20,9 +20,9 @@ define("DMP_BOOTSTRAP_VERSION", "v3.3.7");
 define("DMP_TABLE_TEMPLAT", "dmp_templat");
 
 // CSS
-wp_enqueue_style(DMP_PLUGIN, get_site_url() . DMP_DIR . ('css/style.css'), array(), DMP_VERSION, 'all');
-wp_enqueue_style("bootstrap", get_site_url() . DMP_DIR . ('css/bootstrap.css'), array(), DMP_BOOTSTRAP_VERSION, 'all');
-wp_enqueue_script("bootstrap", get_site_url() . DMP_DIR . ('js/bootstrap.js'), array(), DMP_BOOTSTRAP_VERSION, 'all');
+//wp_enqueue_style(DMP_PLUGIN, get_site_url() . DMP_DIR . ('css/style.css'), array(), DMP_VERSION, 'all');
+//wp_enqueue_style("bootstrap", get_site_url() . DMP_DIR . ('css/bootstrap.css'), array(), DMP_BOOTSTRAP_VERSION, 'all');
+//wp_enqueue_script("bootstrap", get_site_url() . DMP_DIR . ('js/bootstrap.js'), array(), DMP_BOOTSTRAP_VERSION, 'all');
 
 /**********************************************************************************/
 /* active *************************************************************************/
@@ -293,9 +293,9 @@ function dmprdp_register_my_custom_menu_page2() {
     global $menu, $submenu;
     
     $page = 'index.php/gdp';
-    array_push($menu,array('Gestão de dados de Pesquisa','read',$page,$page,'menu-top menu-top-first menu-icon-dashboard','menu-dashboard','http://localhost/projeto/RDP-Brasil/wp-content/plugins/DMP-Wordpress/img/icone_menu_r.png'));  
-    add_submenu_page($page, 'DMP Templates', 'DMP Templates', 'manage_options', 'dmp_admin_templat', 'dmp_admin_templat', '1');
-    add_submenu_page($page, 'Knowledge ', 'Knowledge Area', 'manage_options', 'dmp_admin_group_members', 'dmp_admin_knowledge', '2');
+    //array_push($menu,array('Gestão de dados de Pesquisa','read',$page,$page,'menu-top menu-top-first menu-icon-dashboard','menu-dashboard','http://localhost/projeto/RDP-Brasil/wp-content/plugins/DMP-Wordpress/img/icone_menu_r.png'));  
+    //add_submenu_page($page, 'DMP Templates', 'DMP Templates', 'manage_options', 'dmp_admin_templat', 'dmp_admin_templat', '1');
+    //add_submenu_page($page, 'Knowledge ', 'Knowledge Area', 'manage_options', 'dmp_admin_group_members', 'dmp_admin_knowledge', '2');
     
     //echo '<pre>';
     //print_r($menu);
